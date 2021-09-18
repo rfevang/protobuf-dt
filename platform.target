@@ -18,5 +18,9 @@
 			<unit id="org.eclipse.sdk.feature.group" version="4.19.0.v20210303-1800"/>
 			<unit id="org.eclipse.swtbot.eclipse.feature.group" version="3.0.0.202006031738"/>
 		</location>
+		<location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
+			<repository location="https://download.eclipse.org/tools/cdt/releases/10.2"/>
+			<unit id="org.eclipse.cdt.feature.group" version="10.2.0.202103011047"/>
+		</location>
 	</locations>
 </target>
