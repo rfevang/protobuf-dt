@@ -16,6 +16,7 @@
 			<unit id="org.eclipse.jst.enterprise_ui.feature.feature.group" version="3.21.0.v202012212201"/>
 			<unit id="org.eclipse.emf.mwe2.language.sdk.feature.group" version="2.12.1.v20210218-2134"/>
 			<unit id="org.eclipse.sdk.feature.group" version="4.19.0.v20210303-1800"/>
+			<unit id="org.eclipse.swtbot.eclipse.feature.group" version="3.0.0.202006031738"/>
 		</location>
 	</locations>
 </target>
