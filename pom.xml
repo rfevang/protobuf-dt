@@ -18,6 +18,8 @@
   <modules>
     <module>target-platform</module>
     <module>com.google.eclipse.protobuf</module>
+    <module>com.google.eclipse.protobuf.ui</module>
+    <module>com.google.eclipse.protobuf.feature</module>
   </modules>
 
   <build>
