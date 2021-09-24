@@ -30,6 +30,11 @@
           <artifactId>tycho-p2-director-plugin</artifactId>
           <version>${tycho.version}</version>
         </plugin>
+        <plugin>
+          <groupId>org.eclipse.tycho.extras</groupId>
+          <artifactId>target-platform-validation-plugin</artifactId>
+          <version>${tycho.version}</version>
+        </plugin>
       </plugins>
     </pluginManagement>
 
@@ -39,6 +44,16 @@
         <artifactId>tycho-maven-plugin</artifactId>
         <version>${tycho.version}</version>
         <extensions>true</extensions>
+      </plugin>
+      <plugin>
+        <groupId>org.eclipse.tycho.extras</groupId>
+        <artifactId>target-platform-validation-plugin</artifactId>
+        <version>${tycho.version}</version>
+        <configuration>
+          <checkDependencies>true</checkDependencies>
+          <checkProvisioning>true</checkProvisioning>
+          <executionEnvironment>JavaSE-11</executionEnvironment>
+        </configuration>
       </plugin>
 
       <plugin>
