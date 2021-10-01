@@ -10,6 +10,7 @@
   <properties>
     <tycho.version>2.4.0</tycho.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <xtext.version>2.24.0</xtext.version>
   </properties>
 
   <repositories>
@@ -22,6 +23,13 @@
     <module>com.google.eclipse.protobuf.feature</module>
   </modules>
 
+  <dependencies>
+    <dependency>
+      <groupId>org.eclipse.xtend</groupId>
+      <artifactId>org.eclipse.xtend.lib</artifactId>
+      <version>${xtext.version}</version>
+    </dependency>
+  </dependencies>
   <build>
     <pluginManagement>
       <plugins>
@@ -55,6 +63,100 @@
           <executionEnvironment>JavaSE-11</executionEnvironment>
         </configuration>
       </plugin>
+
+      <plugin>
+        <groupId>org.eclipse.xtend</groupId>
+        <artifactId>xtend-maven-plugin</artifactId>
+        <version>${xtext.version}</version>
+        <executions>
+          <execution>
+            <goals>
+              <goal>compile</goal>
+              <goal>xtend-install-debug-info</goal>
+              <goal>testCompile</goal>
+              <goal>xtend-test-install-debug-info</goal>
+            </goals>
+          </execution>
+        </executions>
+        <configuration>
+          <outputDirectory>xtend-gen</outputDirectory>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>build-helper-maven-plugin</artifactId>
+        <version>1.8</version>
+        <executions>
+          <execution>
+            <goals>
+              <goal>add-source</goal>
+            </goals>
+            <configuration>
+              <sources>
+                <source>src/main/generated-sources/xtend/</source>
+                <source>src/test/generated-sources/xtend/</source>
+              </sources>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-clean-plugin</artifactId>
+        <version>2.5</version>
+        <executions>
+          <execution>
+            <phase>clean</phase>
+            <goals>
+              <goal>clean</goal>
+            </goals>
+            <configuration>
+              <filesets>
+                <fileset>
+                  <directory>src/main/generated-sources/xtend/</directory>
+                </fileset>
+                <fileset>
+                  <directory>src/test/generated-sources/xtend/</directory>
+                </fileset>
+              </filesets>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.eclipse.xtext</groupId>
+        <artifactId>xtext-maven-plugin</artifactId>
+        <version>${xtext.version}</version>
+        <executions>
+          <execution>
+            <goals>
+              <goal>generate</goal>
+            </goals>
+          </execution>
+        </executions>
+        <configuration>
+          <languages>
+            <language>
+              <setup>my.mavenized.HeroLanguageStandaloneSetup</setup>
+              <outputConfigurations>
+                <outputConfiguration>
+                  <outputDirectory>src/main/generated-sources/xtend/</outputDirectory>
+                </outputConfiguration>
+              </outputConfigurations>
+            </language>
+          </languages>
+        </configuration>
+        <dependencies>
+          <dependency>
+            <groupId>my.mavenized.herolanguage</groupId>
+            <artifactId>my.mavenized.herolanguage</artifactId>
+            <version>1.0.0-SNAPSHOT</version>
+          </dependency>
+        </dependencies>
+      </plugin>
+
+
+
 
       <plugin>
         <groupId>org.eclipse.tycho</groupId>
