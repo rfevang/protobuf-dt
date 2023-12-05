@@ -94,7 +94,8 @@
             name="org.hamcrest.library.source"/>
         <requirement
 	name="org.hamcrest.generator"/>-->
-	
+	<requirement
+		name="org.eclipse.xtend.sdk.feature.group"/>
         <requirement
 		name="org.eclipse.cdt.feature.group"/>
 		<!--
@@ -110,9 +111,9 @@
         <sourceLocator
 	      rootFolder="${git.clone.protobuf-dt.location}"/>-->
         <repositoryList
-		name="protobuf_repositories_list"><!--
+		name="protobuf_repositories_list">
           <repository
-              url="http://download.eclipse.org/modeling/tmf/xtext/updates/composite/releases/"/>
+		  url="http://download.eclipse.org/modeling/tmf/xtext/updates/composite/releases/"/><!--
           <repository
 	url="http://download.eclipse.org/technology/swtbot/snapshots/"/> -->
 	            <repository
