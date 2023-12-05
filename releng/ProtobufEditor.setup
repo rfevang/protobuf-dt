@@ -36,14 +36,14 @@
         xsi:type="setup:VariableTask"
         id="uri"
         name="git.clone.protobuf-dt.remoteURI"
-        defaultValue="https://protobuf-dt.googlesource.com/protobuf"
+	    defaultValue="/home/fevang/clients/protobuf-dt"
         label="Protobuf-dt Git Repository"/>
     <setupTask
         xsi:type="setup.p2:P2Task"
         id="protobuf_p2_director">
-      <requirement
-          name="org.eclipse.xtext.sdk.feature.group"/>
-      <repository
+    <requirement
+      name="org.eclipse.xtext.sdk.feature.group"/>
+    <!--<repository
           url="http://download.eclipse.org/modeling/tmf/xtext/updates/composite/releases/"/>
       <repository
           url="http://download.eclipse.org/technology/swtbot/snapshots/"/>
@@ -66,7 +66,7 @@
       <repository
           url="http://download.eclipse.org/tools/cdt/builds/mars/milestones/"/>
       <repository
-          url="http://download.eclipse.org/technology/swtbot/releases/latest/"/>
+    url="http://download.eclipse.org/technology/swtbot/releases/latest/"/>-!-->
     </setupTask>
     <setupTask
         xsi:type="setup.targlets:TargletTask"
@@ -74,16 +74,20 @@
       <targlet
           name="protobuf"
           activeRepositoryList="protobuf_repositories_list">
+      <!--
         <requirement
             name="*"/>
         <requirement
             name="org.eclipse.emf.mwe2.launcher.feature.group"/>
         <requirement
-            name="de.itemis.xtext.antlr.feature.feature.group"/>
+	      name="de.itemis.xtext.antlr.feature.feature.group"/>
         <requirement
-            name="de.itemis.xtext.antlr.sdk.feature.group"/>
+		name="de.itemis.xtext.antlr.sdk.feature.group"/>
+      -->
+	<!--
         <requirement
-            name="org.antlr.runtime"/>
+	name="org.antlr.runtime"/>  -->
+	<!--
         <requirement
             name="org.hamcrest.library.source"/>
         <requirement
@@ -126,7 +130,8 @@
               url="http://download.eclipse.org/tools/cdt/builds/mars/milestones/"/>
           <repository
               url="http://download.eclipse.org/technology/swtbot/releases/latest/"/>
-        </repositoryList>
+		</repositoryList>
+	-->
       </targlet>
       <description></description>
     </setupTask>
@@ -135,7 +140,7 @@
         id="protobuf_projects_import">
       <sourceLocator
           rootFolder="${git.clone.protobuf-dt.location}"/>
-    </setupTask>
+</setupTask>-->
     <description>protobuf-stream</description>
   </stream>
   <description>Editor for protobuf files.</description>
