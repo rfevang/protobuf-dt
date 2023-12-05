@@ -1,4 +1,5 @@
 Manifest-Version: 1.0
+Automatic-Module-Name: com.google.eclipse.protobuf.ui.integration.test
 Bundle-ManifestVersion: 2
 Bundle-Name: Integration tests for com.google.eclipse.protobuf.ui
 Bundle-SymbolicName: com.google.eclipse.protobuf.ui.integration.test

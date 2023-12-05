@@ -1,4 +1,5 @@
 Manifest-Version: 1.0
+Automatic-Module-Name: com.google.eclipse.protobuf
 Bundle-ManifestVersion: 2
 Eclipse-ExtensibleAPI: true
 Bundle-Name: %Bundle-Name

@@ -1,4 +1,5 @@
 Manifest-Version: 1.0
+Automatic-Module-Name: com.google.eclipse.protobuf.cdt.test
 Bundle-ManifestVersion: 2
 Bundle-Name: Unit tests for com.google.eclipse.protobuf.cdt
 Bundle-SymbolicName: com.google.eclipse.protobuf.cdt.test

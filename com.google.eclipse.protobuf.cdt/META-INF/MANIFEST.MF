@@ -1,4 +1,5 @@
 Manifest-Version: 1.0
+Automatic-Module-Name: com.google.eclipse.protobuf.cdt
 Bundle-ManifestVersion: 2
 Bundle-Name: Protocol Buffer Editor: CDT Integration
 Bundle-SymbolicName: com.google.eclipse.protobuf.cdt;singleton:=true
