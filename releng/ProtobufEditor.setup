@@ -90,11 +90,12 @@
         <requirement
 		name="org.antlr.runtime"/>
 	-->
-	<!--
+	
         <requirement
-            name="org.hamcrest.library.source"/>
-        <requirement
-	name="org.hamcrest.generator"/>-->
+		name="org.hamcrest.library"/>
+	
+	<!--	<requirement
+	name="org.hamcrest.generator"/> -->
 	<requirement
 		name="org.eclipse.xtext.generator"/>
 	<requirement
@@ -124,6 +125,8 @@
 		<!-- url="https://download.eclipse.org/tools/cdt/releases/11.3/cdt-11.3.1/"/> -->
 		    <repository
 			    url="https://download.eclipse.org/releases/2022-09/202209141001/"/>
+		    <repository
+			    url="https://download.eclipse.org/tools/orbit/downloads/2022-09/"/>
 	  <!--          <repository
               url="http://download.eclipse.org/tools/orbit/downloads/drops/S20160501200945/repository/"/>
           <repository
