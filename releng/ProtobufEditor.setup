@@ -109,8 +109,8 @@
 	      name="org.eclipse.cdt.sdk.feature.group"/>--><!--
         <requirement
 	      name="org.eclipse.swtbot.eclipse.feature.group"/>-->
-	<!--        <requirement
-	      name="org.eclipse.platform.feature.group"/>-->
+	<requirement
+	      name="org.eclipse.platform.feature.group"/>
       
 	<requirement
             name="org.eclipse.jdt.feature.group"/>
