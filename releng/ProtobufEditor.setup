@@ -108,11 +108,11 @@
 	      name="org.eclipse.swtbot.eclipse.feature.group"/>-->
 	<!--        <requirement
 	      name="org.eclipse.platform.feature.group"/>-->
-      <!--
-        <requirement
+      
+	<requirement
             name="org.eclipse.jdt.feature.group"/>
-        <sourceLocator
-	      rootFolder="${git.clone.protobuf-dt.location}"/>-->
+	<!--        <sourceLocator
+	rootFolder="${git.clone.protobuf-dt.location}"/> -->
         <repositoryList
 		name="protobuf_repositories_list">
 	<repository url="https://download.eclipse.org/modeling/tmf/xtext/updates/releases/2.27.0/"/>
@@ -153,7 +153,7 @@
         id="protobuf_projects_import">
       <sourceLocator
           rootFolder="${git.clone.protobuf-dt.location}"/>
-</setupTask>-->
+    </setupTask>
     <description>protobuf-stream</description>
   </stream>
   <description>Editor for protobuf files.</description>
