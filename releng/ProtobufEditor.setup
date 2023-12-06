@@ -17,7 +17,7 @@
         id="git.clone.protobuf-dt"
         location="${git.clone.protobuf-dt.location}"
         remoteURI="${git.clone.protobuf-dt.remoteURI}"
-	checkoutBranch="2023-12"
+	checkoutBranch="2022-09"
         pushURI="">
       <configSections
           name="gerrit">
@@ -95,6 +95,8 @@
         <requirement
 	name="org.hamcrest.generator"/>-->
 	<requirement
+		name="org.eclipse.xtext.generator"/>
+	<requirement
 		name="org.eclipse.xtend.sdk.feature.group"/>
         <requirement
 		name="org.eclipse.cdt.feature.group"/>
@@ -112,15 +114,15 @@
 	      rootFolder="${git.clone.protobuf-dt.location}"/>-->
         <repositoryList
 		name="protobuf_repositories_list">
-          <repository
-		  url="http://download.eclipse.org/modeling/tmf/xtext/updates/composite/releases/"/><!--
+	<repository url="https://download.eclipse.org/modeling/tmf/xtext/updates/releases/2.27.0/"/>
+	<!--
           <repository
 	url="http://download.eclipse.org/technology/swtbot/snapshots/"/> -->
 	            <repository
 	  url="https://download.eclipse.org/tools/cdt/releases/latest"/>
 		<!-- url="https://download.eclipse.org/tools/cdt/releases/11.3/cdt-11.3.1/"/> -->
 		    <repository
-			    url="https://download.eclipse.org/releases/2023-12/202312061001/"/>
+			    url="https://download.eclipse.org/releases/2022-09/202209141001/"/>
 	  <!--          <repository
               url="http://download.eclipse.org/tools/orbit/downloads/drops/S20160501200945/repository/"/>
           <repository
