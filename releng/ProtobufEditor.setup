@@ -93,6 +93,8 @@
 	
         <requirement
 		name="org.hamcrest.library"/>
+	<requirement
+		name="org.mockito"/>
 	
 	<!--	<requirement
 	name="org.hamcrest.generator"/> -->
