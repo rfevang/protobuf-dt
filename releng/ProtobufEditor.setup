@@ -104,6 +104,8 @@
 		name="org.eclipse.xtend.sdk.feature.group"/>
         <requirement
 		name="org.eclipse.cdt.feature.group"/>
+	<requirement
+		name="org.eclipse.ui.trace"/>
 		<!--
         <requirement
 	      name="org.eclipse.cdt.sdk.feature.group"/>-->
