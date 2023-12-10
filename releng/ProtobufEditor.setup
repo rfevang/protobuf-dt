@@ -44,6 +44,8 @@
         id="protobuf_p2_director">
         <requirement
     name="org.eclipse.xtext.sdk.feature.group"/>
+        <requirement
+	      name="org.eclipse.swtbot.ide.feature.group"/>
 
     <!--    <repository
           url="http://download.eclipse.org/modeling/tmf/xtext/updates/composite/releases/"/>
