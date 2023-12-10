@@ -69,8 +69,8 @@
       url="http://download.itemis.com/updates/milestones/"/>-->
       <!--  <repository
       url="http://download.eclipse.org/tools/cdt/builds/mars/milestones/"/> -->
-      <!--      <repository
-      url="http://download.eclipse.org/technology/swtbot/releases/latest/"/>-->
+      <repository
+          url="http://download.eclipse.org/technology/swtbot/releases/4.1.0/"/>
     </setupTask>
     <setupTask
         xsi:type="setup.targlets:TargletTask"
