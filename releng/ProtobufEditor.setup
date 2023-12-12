@@ -17,7 +17,7 @@
         id="git.clone.protobuf-dt"
         location="${git.clone.protobuf-dt.location}"
         remoteURI="${git.clone.protobuf-dt.remoteURI}"
-        checkoutBranch="2022-09"
+        checkoutBranch="${git.clone.protobuf-dt.branch}"
         pushURI="">
       <configSections
           name="gerrit">
@@ -37,8 +37,13 @@
         xsi:type="setup:VariableTask"
         id="uri"
         name="git.clone.protobuf-dt.remoteURI"
-            defaultValue="file:///home/fevang/clients/protobuf-dt"
+        defaultValue="https://github.com/rfevang/protobuf-dt"
         label="Protobuf-dt Git Repository"/>
+    <setupTask
+        xsi:type="setup:VariableTask"
+        id="branch"
+        name="git.clone.protobuf-dt.branch"
+        defaultValue="master"/>
     <setupTask
         xsi:type="setup.p2:P2Task"
         id="protobuf_p2_director">
