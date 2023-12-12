@@ -17,7 +17,7 @@
         id="git.clone.protobuf-dt"
         location="${git.clone.protobuf-dt.location}"
         remoteURI="${git.clone.protobuf-dt.remoteURI}"
-	checkoutBranch="2022-09"
+        checkoutBranch="2022-09"
         pushURI="">
       <configSections
           name="gerrit">
@@ -37,7 +37,7 @@
         xsi:type="setup:VariableTask"
         id="uri"
         name="git.clone.protobuf-dt.remoteURI"
-	    defaultValue="file:///home/fevang/clients/protobuf-dt"
+            defaultValue="file:///home/fevang/clients/protobuf-dt"
         label="Protobuf-dt Git Repository"/>
     <setupTask
         xsi:type="setup.p2:P2Task"
@@ -45,14 +45,14 @@
         <requirement
     name="org.eclipse.xtext.sdk.feature.group"/>
         <requirement
-	      name="org.eclipse.swtbot.ide.feature.group"/>
+              name="org.eclipse.swtbot.ide.feature.group"/>
 
     <!--    <repository
           url="http://download.eclipse.org/modeling/tmf/xtext/updates/composite/releases/"/>
       <repository
     url="http://download.eclipse.org/technology/swtbot/snapshots/"/>-->
-	            <repository
-	  url="https://download.eclipse.org/tools/cdt/releases/latest"/>
+                    <repository
+          url="https://download.eclipse.org/tools/cdt/releases/latest"/>
       <!--      <repository
       url="http://download.eclipse.org/tools/orbit/downloads/drops/S20160501200945/repository/"/> -->
       <!--      <repository
@@ -80,60 +80,60 @@
           activeRepositoryList="protobuf_repositories_list">
       
         <requirement
-		name="*"/>
-	<requirement
+                name="*"/>
+        <requirement
             name="org.eclipse.emf.mwe2.launcher.feature.group"/>
-	<requirement
-	      name="de.itemis.xtext.antlr.feature.feature.group"/>
-	<!--<requirement
-		name="de.itemis.xtext.antlr.sdk.feature.group"/>
+        <requirement
+              name="de.itemis.xtext.antlr.feature.feature.group"/>
+        <!--<requirement
+                name="de.itemis.xtext.antlr.sdk.feature.group"/>
       -->
-	<!--
+        <!--
         <requirement
-		name="org.antlr.runtime"/>
-	-->
-	
+                name="org.antlr.runtime"/>
+        -->
+        
         <requirement
-		name="org.hamcrest.library"/>
-	<requirement
-		name="org.mockito"/>
-	
-	<!--	<requirement
-	name="org.hamcrest.generator"/> -->
-	<requirement
-		name="org.eclipse.xtext.generator"/>
-	<requirement
-		name="org.eclipse.xtend.sdk.feature.group"/>
+                name="org.hamcrest.library"/>
         <requirement
-		name="org.eclipse.cdt.feature.group"/>
-	<requirement
-		name="org.eclipse.ui.trace"/>
-		<!--
+                name="org.mockito"/>
+        
+        <!--    <requirement
+        name="org.hamcrest.generator"/> -->
         <requirement
-	      name="org.eclipse.cdt.sdk.feature.group"/>-->
+                name="org.eclipse.xtext.generator"/>
         <requirement
-	      name="org.eclipse.swtbot.eclipse.feature.group"/>
-	<requirement
-	      name="org.eclipse.platform.feature.group"/>
+                name="org.eclipse.xtend.sdk.feature.group"/>
+        <requirement
+                name="org.eclipse.cdt.feature.group"/>
+        <requirement
+                name="org.eclipse.ui.trace"/>
+                <!--
+        <requirement
+              name="org.eclipse.cdt.sdk.feature.group"/>-->
+        <requirement
+              name="org.eclipse.swtbot.eclipse.feature.group"/>
+        <requirement
+              name="org.eclipse.platform.feature.group"/>
       
-	<requirement
+        <requirement
             name="org.eclipse.jdt.feature.group"/>
-	<!--        <sourceLocator
-	rootFolder="${git.clone.protobuf-dt.location}"/> -->
+        <!--        <sourceLocator
+        rootFolder="${git.clone.protobuf-dt.location}"/> -->
         <repositoryList
-		name="protobuf_repositories_list">
-	<repository url="https://download.eclipse.org/modeling/tmf/xtext/updates/releases/2.27.0/"/>
-	<!--
+                name="protobuf_repositories_list">
+        <repository url="https://download.eclipse.org/modeling/tmf/xtext/updates/releases/2.27.0/"/>
+        <!--
           <repository
-	url="http://download.eclipse.org/technology/swtbot/snapshots/"/> -->
-	            <repository
-	  url="https://download.eclipse.org/tools/cdt/releases/latest"/>
-		<!-- url="https://download.eclipse.org/tools/cdt/releases/11.3/cdt-11.3.1/"/> -->
-		    <repository
-			    url="https://download.eclipse.org/releases/2022-09/202209141001/"/>
-		    <repository
-			    url="https://download.eclipse.org/tools/orbit/downloads/2022-09/"/>
-	  <!--          <repository
+        url="http://download.eclipse.org/technology/swtbot/snapshots/"/> -->
+                    <repository
+          url="https://download.eclipse.org/tools/cdt/releases/latest"/>
+                <!-- url="https://download.eclipse.org/tools/cdt/releases/11.3/cdt-11.3.1/"/> -->
+                    <repository
+                            url="https://download.eclipse.org/releases/2022-09/202209141001/"/>
+                    <repository
+                            url="https://download.eclipse.org/tools/orbit/downloads/2022-09/"/>
+          <!--          <repository
               url="http://download.eclipse.org/tools/orbit/downloads/drops/S20160501200945/repository/"/>
           <repository
               url="http://download.eclipse.org/modeling/tmf/xtext/updates/composite/latest/"/>
@@ -145,15 +145,15 @@
               url="http://download.eclipse.org/modeling/emft/mwe/updates/milestones/"/>
           <repository
               url="http://download.eclipse.org/tools/gef/gef4/updates/releases"/>
-		  -->
-	  <repository
-		  url="http://download.itemis.com/updates/milestones/"/>
-	  <!--
+                  -->
+          <repository
+                  url="http://download.itemis.com/updates/milestones/"/>
+          <!--
           <repository
               url="http://download.eclipse.org/tools/cdt/builds/mars/milestones/"/>
           <repository
-	  url="http://download.eclipse.org/technology/swtbot/releases/latest/"/>-->
-		</repositoryList>
+          url="http://download.eclipse.org/technology/swtbot/releases/latest/"/>-->
+                </repositoryList>
       </targlet>
       <description></description>
     </setupTask>
