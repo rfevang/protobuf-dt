@@ -1,0 +1,394 @@
+/*
+ * Copyright (c) 2014, 2015 Google Inc.
+ * 
+ * All rights reserved. This program and the accompanying materials are made available under the terms of the Eclipse
+ * Public License v1.0 which accompanies this distribution, and is available at
+ * 
+ * http://www.eclipse.org/legal/epl-v10.html
+ */
+package com.google.eclipse.protobuf.validation
+
+import static com.google.eclipse.protobuf.protobuf.ProtobufPackage.Literals.MAP_TYPE__KEY_TYPE
+import static com.google.eclipse.protobuf.protobuf.ProtobufPackage.Literals.MAP_TYPE__VALUE_TYPE
+import static com.google.eclipse.protobuf.protobuf.ProtobufPackage.Literals.MESSAGE_FIELD__MODIFIER
+import static com.google.eclipse.protobuf.protobuf.ProtobufPackage.Literals.PACKAGE__IMPORTED_NAMESPACE
+import static com.google.eclipse.protobuf.protobuf.ProtobufPackage.Literals.SYNTAX__NAME
+import static com.google.eclipse.protobuf.validation.Messages.expectedFieldNumber
+import static com.google.eclipse.protobuf.validation.Messages.expectedSyntaxIdentifier
+import static com.google.eclipse.protobuf.validation.Messages.fieldNumbersMustBePositive
+import static com.google.eclipse.protobuf.validation.Messages.indexRangeEndLessThanStart
+import static com.google.eclipse.protobuf.validation.Messages.indexRangeNonPositive
+import static com.google.eclipse.protobuf.validation.Messages.invalidMapKeyType
+import static com.google.eclipse.protobuf.validation.Messages.invalidMapValueType
+import static com.google.eclipse.protobuf.validation.Messages.mapWithModifier
+import static com.google.eclipse.protobuf.validation.Messages.mapWithinTypeExtension
+import static com.google.eclipse.protobuf.validation.Messages.missingModifier
+import static com.google.eclipse.protobuf.validation.Messages.multiplePackages
+import static com.google.eclipse.protobuf.validation.Messages.nameConflict
+import static com.google.eclipse.protobuf.validation.Messages.oneofFieldWithModifier
+import static com.google.eclipse.protobuf.validation.Messages.requiredInProto3
+import static com.google.eclipse.protobuf.validation.Messages.reservedIndexAndName
+import static com.google.eclipse.protobuf.validation.Messages.reservedToMax
+import static com.google.eclipse.protobuf.validation.Messages.tagNumberRangeConflict
+import static com.google.eclipse.protobuf.validation.Messages.tagNumberConflict
+import static com.google.eclipse.protobuf.validation.Messages.conflictingExtensions
+import static com.google.eclipse.protobuf.validation.Messages.conflictingField
+import static com.google.eclipse.protobuf.validation.Messages.conflictingGroup
+import static com.google.eclipse.protobuf.validation.Messages.conflictingReservedName
+import static com.google.eclipse.protobuf.validation.Messages.conflictingReservedNumber
+import static com.google.eclipse.protobuf.validation.Messages.unknownSyntax
+import static com.google.eclipse.protobuf.validation.Messages.unrecognizedSyntaxIdentifier
+import static java.lang.String.format
+import java.util.ArrayList
+import java.util.Collection
+import java.util.HashSet
+import java.util.Map
+import java.util.Set
+import com.google.common.collect.Iterables
+import com.google.common.collect.LinkedHashMultimap
+import com.google.common.collect.Multimap
+import com.google.common.collect.Range
+import com.google.eclipse.protobuf.model.util.IndexRanges
+import com.google.eclipse.protobuf.model.util.IndexRanges.BackwardsRangeException
+import com.google.eclipse.protobuf.model.util.IndexedElements
+import com.google.eclipse.protobuf.model.util.Protobufs
+import com.google.eclipse.protobuf.model.util.StringLiterals
+import com.google.eclipse.protobuf.model.util.Syntaxes
+import com.google.eclipse.protobuf.naming.NameResolver
+import com.google.eclipse.protobuf.protobuf.Extensions
+import com.google.eclipse.protobuf.protobuf.Group
+import com.google.eclipse.protobuf.protobuf.IndexRange
+import com.google.eclipse.protobuf.protobuf.IndexedElement
+import com.google.eclipse.protobuf.protobuf.MapType
+import com.google.eclipse.protobuf.protobuf.MapTypeLink
+import com.google.eclipse.protobuf.protobuf.Message
+import com.google.eclipse.protobuf.protobuf.MessageField
+import com.google.eclipse.protobuf.protobuf.ModifierEnum
+import com.google.eclipse.protobuf.protobuf.OneOf
+import com.google.eclipse.protobuf.protobuf.Package
+import com.google.eclipse.protobuf.protobuf.Protobuf
+import com.google.eclipse.protobuf.protobuf.ProtobufElement
+import com.google.eclipse.protobuf.protobuf.ProtobufPackage
+import com.google.eclipse.protobuf.protobuf.Reservation
+import com.google.eclipse.protobuf.protobuf.Reserved
+import com.google.eclipse.protobuf.protobuf.ScalarType
+import com.google.eclipse.protobuf.protobuf.ScalarTypeLink
+import com.google.eclipse.protobuf.protobuf.StringLiteral
+import com.google.eclipse.protobuf.protobuf.Syntax
+import com.google.eclipse.protobuf.protobuf.TypeExtension
+import com.google.eclipse.protobuf.protobuf.TypeLink
+import com.google.inject.Inject
+import org.eclipse.emf.common.util.TreeIterator
+import org.eclipse.emf.ecore.EAttribute
+import org.eclipse.emf.ecore.EObject
+import org.eclipse.emf.ecore.EStructuralFeature
+import org.eclipse.xtext.EcoreUtil2
+import org.eclipse.xtext.util.SimpleAttributeResolver
+import org.eclipse.xtext.validation.Check
+import org.eclipse.xtext.validation.ComposedChecks
+
+/** 
+ * @author alruiz@google.com (Alex Ruiz)
+ */
+@ComposedChecks(validators=#[DataTypeValidator,
+	ImportValidator]) class ProtobufValidator extends AbstractProtobufValidator {
+	public static final String SYNTAX_IS_NOT_KNOWN_ERROR = "syntaxIsNotProto2"
+	public static final String INVALID_FIELD_TAG_NUMBER_ERROR = "invalidFieldTagNumber"
+	public static final String MORE_THAN_ONE_PACKAGE_ERROR = "moreThanOnePackage"
+	public static final String MISSING_MODIFIER_ERROR = "noModifier"
+	public static final String MAP_WITH_MODIFIER_ERROR = "mapWithModifier"
+	public static final String REQUIRED_IN_PROTO3_ERROR = "requiredInProto3"
+	public static final String INVALID_MAP_KEY_TYPE_ERROR = "invalidMapKeyType"
+	public static final String MAP_WITH_MAP_VALUE_TYPE_ERROR = "mapWithMapValueType"
+	public static final String ONEOF_FIELD_WITH_MODIFIER_ERROR = "oneofFieldWithModifier"
+	@Inject IndexedElements indexedElements
+	@Inject IndexRanges indexRanges
+	@Inject NameResolver nameResolver
+	@Inject StringLiterals stringLiterals
+	@Inject Protobufs protobufs
+	@Inject Syntaxes syntaxes
+
+	@Check def void checkIsKnownSyntax(Protobuf protobuf) {
+		if (!protobufs.hasKnownSyntax(protobuf)) {
+			warning(unknownSyntax, null)
+		}
+	}
+
+	@Check def void checkSyntaxIsKnown(Syntax syntax) {
+		if (syntaxes.isSpecifyingProto2Syntax(syntax) || syntaxes.isSpecifyingProto3Syntax(syntax)) {
+			return;
+		}
+		var String name = syntaxes.getName(syntax)
+		var String msg = if(name === null) expectedSyntaxIdentifier else format(unrecognizedSyntaxIdentifier, name)
+		error(msg, syntax, SYNTAX__NAME, SYNTAX_IS_NOT_KNOWN_ERROR)
+	}
+
+	@Check def void checkIndexRangeBounds(IndexRange indexRange) {
+		var Range<Long> range
+		try {
+			range = indexRanges.toLongRange(indexRange)
+		} catch (BackwardsRangeException e) {
+			error(indexRangeEndLessThanStart, indexRange, null)
+			return;
+		}
+
+		if (range.lowerEndpoint() <= 0) {
+			error(indexRangeNonPositive, indexRange, ProtobufPackage.Literals.INDEX_RANGE__FROM)
+		}
+	}
+
+	@Check def void checkForIndexConflicts(Message message) {
+		var Multimap<EObject, Range<Long>> rangeUsages = LinkedHashMultimap.create()
+		for (Reserved reserved : getOwnedElements(message, Reserved)) {
+			for (IndexRange indexRange : Iterables.filter(reserved.getReservations(), IndexRange)) {
+				try {
+					var Range<Long> range = indexRanges.toLongRange(indexRange)
+					errorOnConflicts(range, rangeUsages, indexRange, null)
+					rangeUsages.put(reserved, range)
+				} catch (BackwardsRangeException e) { // Do not try to find conflicts with invalid ranges.
+				}
+
+			}
+		}
+		for (Extensions extensions : getOwnedElements(message, Extensions)) {
+			for (IndexRange indexRange : extensions.getRanges()) {
+				try {
+					var Range<Long> range = indexRanges.toLongRange(indexRange)
+					errorOnConflicts(range, rangeUsages, indexRange, null)
+					rangeUsages.put(extensions, range)
+				} catch (BackwardsRangeException e) { // Do not try to find conflicts with invalid ranges.
+				}
+
+			}
+		}
+		for (IndexedElement element : getOwnedElements(message, IndexedElement)) {
+			var long index = indexedElements.indexOf(element)
+			var Range<Long> range = Range.singleton(index)
+			var EStructuralFeature feature = indexedElements.indexFeatureOf(element)
+			errorOnConflicts(range, rangeUsages, element, feature)
+			rangeUsages.put(element, range)
+		}
+	}
+
+	def private void errorOnConflicts(Range<Long> range, Multimap<EObject, Range<Long>> rangeUsages,
+		EObject errorSource, EStructuralFeature errorFeature) {
+		for (Map.Entry<EObject, Range<Long>> rangeUsage : rangeUsages.entries()) {
+			var Range<Long> usedRange = rangeUsage.getValue()
+			if (range.isConnected(usedRange)) {
+				var EObject rangeUser = rangeUsage.getKey()
+				var boolean rangeIsSingular = range.hasUpperBound() && range.upperEndpoint() === range.lowerEndpoint()
+				var String template = if(rangeIsSingular) tagNumberConflict else tagNumberRangeConflict
+				var String rangeUserString
+				var String usedRangeString = rangeToString(usedRange)
+				if (rangeUser instanceof MessageField) {
+					rangeUserString = String.format(conflictingField, nameResolver.nameOf(rangeUser), usedRangeString)
+				} else if (rangeUser instanceof Group) {
+					rangeUserString = String.format(conflictingGroup, nameResolver.nameOf(rangeUser), usedRangeString)
+				} else if (rangeUser instanceof Reserved) {
+					rangeUserString = String.format(conflictingReservedNumber, usedRangeString)
+				} else {
+					rangeUserString = String.format(conflictingExtensions, usedRangeString)
+				}
+				var String message = String.format(template, rangeToString(range), rangeUserString)
+				error(message, errorSource, errorFeature)
+				// Don't report more than one error per element.
+				return;
+			}
+		}
+	}
+
+	def private String rangeToString(Range<Long> range) {
+		if (range.hasLowerBound() && range.hasUpperBound() && range.lowerEndpoint() === range.upperEndpoint()) {
+			return String.valueOf(range.lowerEndpoint())
+		}
+		var String upper = if(range.hasUpperBound()) String.valueOf(range.upperEndpoint()) else indexRanges.
+				getMaxKeyword()
+		return String.format("%d to %s", range.lowerEndpoint(), upper)
+	}
+
+	@Check def void checkForReservedToMax(Reserved reserved) {
+		for (IndexRange range : Iterables.filter(reserved.getReservations(), IndexRange)) {
+			var String to = range.getTo()
+			if (indexRanges.getMaxKeyword().equals(to)) {
+				error(reservedToMax, range, ProtobufPackage.Literals.INDEX_RANGE__TO)
+			}
+		}
+	}
+
+	@Check def void checkForReservedNameConflicts(Message message) {
+		var Set<String> reservedNames = new HashSet()
+		for (Reserved reserved : getOwnedElements(message, Reserved)) {
+			for (StringLiteral stringLiteral : Iterables.filter(reserved.getReservations(), StringLiteral)) {
+				var String name = stringLiterals.getCombinedString(stringLiteral)
+				reportReservedNameConflicts(name, reservedNames, stringLiteral, null)
+				reservedNames.add(name)
+			}
+		}
+		for (IndexedElement element : getOwnedElements(message, IndexedElement)) {
+			var String name = nameResolver.nameOf(element)
+			if (name !== null) {
+				var EAttribute nameAttribute = SimpleAttributeResolver.NAME_RESOLVER.getAttribute(element)
+				reportReservedNameConflicts(name, reservedNames, element, nameAttribute)
+			}
+		}
+	}
+
+	@Check def void checkForReservedIndexAndName(Reserved reserved) {
+		var boolean hasIndexReservation = false
+		var boolean hasNameReservation = false
+		for (Reservation reservation : reserved.getReservations()) {
+			if (reservation instanceof IndexRange) {
+				hasIndexReservation = true
+			} else if (reservation instanceof StringLiteral) {
+				hasNameReservation = true
+			}
+		}
+		if (hasIndexReservation && hasNameReservation) {
+			error(reservedIndexAndName, reserved, null)
+		}
+	}
+
+	def private void reportReservedNameConflicts(String name, Set<String> reservedNames, EObject errorSource,
+		EAttribute errorFeature) {
+		if (reservedNames.contains(name)) {
+			var String nameUser = String.format(conflictingReservedName, name)
+			var String message = String.format(nameConflict, name, nameUser)
+			error(message, errorSource, errorFeature)
+		}
+	}
+
+	/** 
+	 * Returns elements of the given type contained within the given message, except those contained
+	 * within intervening Messages or TypeExtensions.
+	 */
+	def private static <E extends EObject> Collection<E> getOwnedElements(Message container, Class<E> elementType) {
+		var Collection<E> elements = new ArrayList<E>()
+		var TreeIterator<EObject> elementsIterator = container.eAllContents()
+		while (elementsIterator.hasNext()) {
+			var EObject element = elementsIterator.next()
+			if (elementType.isAssignableFrom(element.getClass())) {
+				/*FIXME Cannot add Annotation to Variable declaration. Java code: @SuppressWarnings("unchecked")*/
+				var E elementAsElementType = (element as E)
+				elements.add(elementAsElementType)
+			}
+			if (element instanceof Message || element instanceof TypeExtension) {
+				elementsIterator.prune()
+			}
+		}
+		return elements
+	}
+
+	@Check def void checkFieldModifiers(MessageField field) {
+		if (field.getType() instanceof MapTypeLink) {
+			checkMapField(field)
+			return;
+		}
+		if (field.eContainer() instanceof OneOf) {
+			checkOneOfField(field)
+			return;
+		}
+		if (field.getModifier() === ModifierEnum.UNSPECIFIED && isProto2Field(field)) {
+			error(missingModifier, field, MESSAGE_FIELD__MODIFIER, MISSING_MODIFIER_ERROR)
+		} else if (field.getModifier() === ModifierEnum.REQUIRED && isProto3Field(field)) {
+			error(requiredInProto3, field, MESSAGE_FIELD__MODIFIER, REQUIRED_IN_PROTO3_ERROR)
+		}
+	}
+
+	def private void checkMapField(MessageField field) {
+		// TODO(het): Add quickfix to delete the modifier
+		if (field.getModifier() !== ModifierEnum.UNSPECIFIED) {
+			error(mapWithModifier, field, MESSAGE_FIELD__MODIFIER, MAP_WITH_MODIFIER_ERROR)
+		}
+	}
+
+	def private void checkOneOfField(MessageField field) {
+		if (field.getModifier() !== ModifierEnum.UNSPECIFIED) {
+			error(oneofFieldWithModifier, field, MESSAGE_FIELD__MODIFIER, ONEOF_FIELD_WITH_MODIFIER_ERROR)
+		}
+	}
+
+	def private boolean isProto2Field(MessageField field) {
+		var EObject container = field.eContainer()
+		if (container !== null && !(container instanceof Protobuf)) {
+			container = container.eContainer()
+		}
+		if (container instanceof Protobuf) {
+			return syntaxes.isSpecifyingProto2Syntax(((container as Protobuf)).getSyntax())
+		}
+		return false
+	}
+
+	def private boolean isProto3Field(MessageField field) {
+		var EObject container = field.eContainer()
+		while (container !== null && !(container instanceof Protobuf)) {
+			container = container.eContainer()
+		}
+		if (container instanceof Protobuf) {
+			return syntaxes.isSpecifyingProto3Syntax(((container as Protobuf)).getSyntax())
+		}
+		return false
+	}
+
+	@Check def void checkTagNumberIsGreaterThanZero(IndexedElement e) {
+		if (isNameNull(e)) {
+			return; // we already show an error if name is null, no need to go further.
+		}
+		var long index = indexedElements.indexOf(e)
+		if (index > 0) {
+			return;
+		}
+		var String msg = if(index === 0) fieldNumbersMustBePositive else expectedFieldNumber
+		invalidTagNumberError(msg, e)
+	}
+
+	def private void invalidTagNumberError(String message, IndexedElement e) {
+		error(message, e, indexedElements.indexFeatureOf(e), INVALID_FIELD_TAG_NUMBER_ERROR)
+	}
+
+	@Check def void checkOnlyOnePackageDefinition(Package aPackage) {
+		var boolean firstFound = false
+		var Protobuf root = (aPackage.eContainer() as Protobuf)
+		for (ProtobufElement e : root.getElements()) {
+			if (e === aPackage) {
+				if (firstFound) {
+					error(multiplePackages, aPackage, PACKAGE__IMPORTED_NAMESPACE, MORE_THAN_ONE_PACKAGE_ERROR)
+				}
+				return;
+			}
+			if (e instanceof Package && !firstFound) {
+				firstFound = true
+			}
+		}
+	}
+
+	def private boolean isNameNull(IndexedElement e) {
+		return nameResolver.nameOf(e) === null
+	}
+
+	@Check def void checkMapTypeHasValidKeyType(MapType map) {
+		var TypeLink keyType = map.getKeyType()
+		if (!(keyType instanceof ScalarTypeLink)) {
+			error(invalidMapKeyType, map, MAP_TYPE__KEY_TYPE, INVALID_MAP_KEY_TYPE_ERROR)
+			return;
+		}
+		var ScalarType scalarKeyType = ((keyType as ScalarTypeLink)).getTarget()
+		if (scalarKeyType === ScalarType.BYTES || scalarKeyType === ScalarType.DOUBLE ||
+			scalarKeyType === ScalarType.FLOAT) {
+			error(invalidMapKeyType, map, MAP_TYPE__KEY_TYPE, INVALID_MAP_KEY_TYPE_ERROR)
+		}
+	}
+
+	@Check def void checkMapTypeHasValidValueType(MapType map) {
+		var TypeLink keyType = map.getValueType()
+		if (keyType instanceof MapTypeLink) {
+			error(invalidMapValueType, map, MAP_TYPE__VALUE_TYPE, MAP_WITH_MAP_VALUE_TYPE_ERROR)
+			return;
+		}
+	}
+
+	@Check def void checkMapIsNotWithinExtension(MapType map) {
+		if (EcoreUtil2.getContainerOfType(map, TypeExtension) !== null) {
+			error(mapWithinTypeExtension, map, null)
+		}
+	}
+}
