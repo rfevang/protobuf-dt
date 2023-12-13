@@ -28,10 +28,10 @@ import com.google.eclipse.protobuf.protobuf.IndexRange;
 import com.google.eclipse.protobuf.protobuf.ProtobufPackage;
 import com.google.inject.Inject;
 
-public class ProtobufJavaValidator_checkIndexRangeBounds {
+public class ProtobufValidator_checkIndexRangeBounds {
   @Rule public XtextRule xtext = overrideRuntimeModuleWith(unitTestModule());
 
-  @Inject private ProtobufJavaValidator validator;
+  @Inject private ProtobufValidator validator;
   private ValidationMessageAcceptor messageAcceptor;
 
   @Before public void setUp() {

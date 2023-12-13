@@ -24,12 +24,12 @@ import com.google.eclipse.protobuf.junit.core.XtextRule;
 import com.google.eclipse.protobuf.protobuf.Reserved;
 import com.google.inject.Inject;
 
-public class ProtobufJavaValidator_checkForReservedIndexAndName_Test {
+public class ProtobufValidator_checkForReservedIndexAndName_Test {
   private static final String ERROR_MESSAGE = "A reserved declaration may not include both numbers and names.";
 
   @Rule public XtextRule xtext = overrideRuntimeModuleWith(unitTestModule());
 
-  @Inject private ProtobufJavaValidator validator;
+  @Inject private ProtobufValidator validator;
   private ValidationMessageAcceptor messageAcceptor;
 
   @Before public void setUp() {

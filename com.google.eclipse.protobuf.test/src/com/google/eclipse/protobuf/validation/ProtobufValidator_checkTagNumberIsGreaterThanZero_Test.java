@@ -16,7 +16,7 @@ import static org.mockito.Mockito.verifyZeroInteractions;
 import static com.google.eclipse.protobuf.junit.core.UnitTestModule.unitTestModule;
 import static com.google.eclipse.protobuf.junit.core.XtextRule.overrideRuntimeModuleWith;
 import static com.google.eclipse.protobuf.protobuf.ProtobufPackage.Literals.MESSAGE_FIELD__INDEX;
-import static com.google.eclipse.protobuf.validation.ProtobufJavaValidator.INVALID_FIELD_TAG_NUMBER_ERROR;
+import static com.google.eclipse.protobuf.validation.ProtobufValidator.INVALID_FIELD_TAG_NUMBER_ERROR;
 
 import org.eclipse.xtext.validation.ValidationMessageAcceptor;
 import org.junit.Before;
@@ -29,14 +29,14 @@ import com.google.eclipse.protobuf.protobuf.MessageField;
 import com.google.inject.Inject;
 
 /**
- * Tests for <code>{@link ProtobufJavaValidator#checkTagNumberIsGreaterThanZero(IndexedElement)}</code>
+ * Tests for <code>{@link ProtobufValidator#checkTagNumberIsGreaterThanZero(IndexedElement)}</code>
  *
  * @author alruiz@google.com (Alex Ruiz)
  */
-public class ProtobufJavaValidator_checkTagNumberIsGreaterThanZero_Test {
+public class ProtobufValidator_checkTagNumberIsGreaterThanZero_Test {
   @Rule public XtextRule xtext = overrideRuntimeModuleWith(unitTestModule());
 
-  @Inject private ProtobufJavaValidator validator;
+  @Inject private ProtobufValidator validator;
   private ValidationMessageAcceptor messageAcceptor;
 
   @Before public void setUp() {

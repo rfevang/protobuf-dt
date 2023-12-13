@@ -12,7 +12,7 @@ import static com.google.eclipse.protobuf.junit.core.UnitTestModule.unitTestModu
 import static com.google.eclipse.protobuf.junit.core.XtextRule.overrideRuntimeModuleWith;
 import static com.google.eclipse.protobuf.protobuf.ProtobufPackage.Literals.MAP_TYPE__KEY_TYPE;
 import static com.google.eclipse.protobuf.validation.Messages.invalidMapKeyType;
-import static com.google.eclipse.protobuf.validation.ProtobufJavaValidator.INVALID_MAP_KEY_TYPE_ERROR;
+import static com.google.eclipse.protobuf.validation.ProtobufValidator.INVALID_MAP_KEY_TYPE_ERROR;
 import static org.eclipse.xtext.validation.ValidationMessageAcceptor.INSIGNIFICANT_INDEX;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
@@ -30,12 +30,12 @@ import org.junit.Rule;
 import org.junit.Test;
 
 /**
- * Tests for <code>{@link ProtobufJavaValidator#checkMapTypeHasValidKeyType(MapType)}</code>
+ * Tests for <code>{@link ProtobufValidator#checkMapTypeHasValidKeyType(MapType)}</code>
  */
-public class ProtobufJavaValidator_checkMapTypeHasValidKeyType_Test {
+public class ProtobufValidator_checkMapTypeHasValidKeyType_Test {
   @Rule public XtextRule xtext = overrideRuntimeModuleWith(unitTestModule());
 
-  @Inject private ProtobufJavaValidator validator;
+  @Inject private ProtobufValidator validator;
   private ValidationMessageAcceptor messageAcceptor;
 
   @Before public void setUp() {

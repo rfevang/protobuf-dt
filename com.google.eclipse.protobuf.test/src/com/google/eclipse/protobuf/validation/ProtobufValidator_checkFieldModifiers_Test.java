@@ -14,9 +14,9 @@ import static com.google.eclipse.protobuf.protobuf.ProtobufPackage.Literals.MESS
 import static com.google.eclipse.protobuf.validation.Messages.mapWithModifier;
 import static com.google.eclipse.protobuf.validation.Messages.missingModifier;
 import static com.google.eclipse.protobuf.validation.Messages.oneofFieldWithModifier;
-import static com.google.eclipse.protobuf.validation.ProtobufJavaValidator.MAP_WITH_MODIFIER_ERROR;
-import static com.google.eclipse.protobuf.validation.ProtobufJavaValidator.MISSING_MODIFIER_ERROR;
-import static com.google.eclipse.protobuf.validation.ProtobufJavaValidator.ONEOF_FIELD_WITH_MODIFIER_ERROR;
+import static com.google.eclipse.protobuf.validation.ProtobufValidator.MAP_WITH_MODIFIER_ERROR;
+import static com.google.eclipse.protobuf.validation.ProtobufValidator.MISSING_MODIFIER_ERROR;
+import static com.google.eclipse.protobuf.validation.ProtobufValidator.ONEOF_FIELD_WITH_MODIFIER_ERROR;
 import static org.eclipse.xtext.validation.ValidationMessageAcceptor.INSIGNIFICANT_INDEX;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
@@ -32,12 +32,12 @@ import org.junit.Rule;
 import org.junit.Test;
 
 /**
- * Tests for <code>{@link ProtobufJavaValidator#checkFieldModifiers(MessageField)}</code>
+ * Tests for <code>{@link ProtobufValidator#checkFieldModifiers(MessageField)}</code>
  */
-public class ProtobufJavaValidator_checkFieldModifiers_Test {
+public class ProtobufValidator_checkFieldModifiers_Test {
   @Rule public XtextRule xtext = overrideRuntimeModuleWith(unitTestModule());
 
-  @Inject private ProtobufJavaValidator validator;
+  @Inject private ProtobufValidator validator;
   private ValidationMessageAcceptor messageAcceptor;
 
   @Before public void setUp() {
@@ -77,7 +77,7 @@ public class ProtobufJavaValidator_checkFieldModifiers_Test {
     MessageField field = xtext.find("bar", MessageField.class);
     validator.checkFieldModifiers(field);
     verify(messageAcceptor).acceptError(Messages.requiredInProto3, field, MESSAGE_FIELD__MODIFIER,
-        INSIGNIFICANT_INDEX, ProtobufJavaValidator.REQUIRED_IN_PROTO3_ERROR);
+        INSIGNIFICANT_INDEX, ProtobufValidator.REQUIRED_IN_PROTO3_ERROR);
   }
 
   // syntax = "proto2";

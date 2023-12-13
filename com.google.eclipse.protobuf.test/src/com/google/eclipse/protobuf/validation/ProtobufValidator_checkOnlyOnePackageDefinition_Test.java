@@ -17,7 +17,7 @@ import static com.google.eclipse.protobuf.junit.core.UnitTestModule.unitTestModu
 import static com.google.eclipse.protobuf.junit.core.XtextRule.overrideRuntimeModuleWith;
 import static com.google.eclipse.protobuf.protobuf.ProtobufPackage.Literals.PACKAGE__IMPORTED_NAMESPACE;
 import static com.google.eclipse.protobuf.validation.Messages.multiplePackages;
-import static com.google.eclipse.protobuf.validation.ProtobufJavaValidator.MORE_THAN_ONE_PACKAGE_ERROR;
+import static com.google.eclipse.protobuf.validation.ProtobufValidator.MORE_THAN_ONE_PACKAGE_ERROR;
 
 import org.eclipse.xtext.validation.ValidationMessageAcceptor;
 import org.junit.Before;
@@ -29,14 +29,14 @@ import com.google.eclipse.protobuf.protobuf.Package;
 import com.google.inject.Inject;
 
 /**
- * Tests for <code>{@link ProtobufJavaValidator#checkOnlyOnePackageDefinition(Package)}</code>
+ * Tests for <code>{@link ProtobufValidator#checkOnlyOnePackageDefinition(Package)}</code>
  *
  * @author alruiz@google.com (Alex Ruiz)
  */
-public class ProtobufJavaValidator_checkOnlyOnePackageDefinition_Test {
+public class ProtobufValidator_checkOnlyOnePackageDefinition_Test {
   @Rule public XtextRule xtext = overrideRuntimeModuleWith(unitTestModule());
 
-  @Inject private ProtobufJavaValidator validator;
+  @Inject private ProtobufValidator validator;
   private ValidationMessageAcceptor messageAcceptor;
 
   @Before public void setUp() {

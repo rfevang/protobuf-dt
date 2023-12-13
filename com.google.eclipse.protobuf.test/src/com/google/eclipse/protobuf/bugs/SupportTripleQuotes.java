@@ -13,7 +13,7 @@ import static com.google.eclipse.protobuf.junit.core.XtextRule.overrideRuntimeMo
 import static org.junit.Assert.assertTrue;
 
 import com.google.eclipse.protobuf.junit.core.XtextRule;
-import com.google.eclipse.protobuf.validation.ProtobufJavaValidator;
+import com.google.eclipse.protobuf.validation.ProtobufValidator;
 import com.google.inject.Inject;
 
 import org.eclipse.emf.common.util.BasicDiagnostic;
@@ -26,7 +26,7 @@ import org.junit.Test;
 public class SupportTripleQuotes {
   @Rule public XtextRule xtext = overrideRuntimeModuleWith(unitTestModule());
 
-  @Inject private ProtobufJavaValidator validator;
+  @Inject private ProtobufValidator validator;
 
   // syntax = "proto2";
   //

@@ -18,11 +18,11 @@ import static com.google.eclipse.protobuf.ui.quickfix.Messages.removeDuplicatePa
 import static com.google.eclipse.protobuf.util.Strings.quote;
 import static com.google.eclipse.protobuf.validation.DataTypeValidator.EXPECTED_BOOL_ERROR;
 import static com.google.eclipse.protobuf.validation.DataTypeValidator.EXPECTED_STRING_ERROR;
-import static com.google.eclipse.protobuf.validation.ProtobufJavaValidator.INVALID_FIELD_TAG_NUMBER_ERROR;
-import static com.google.eclipse.protobuf.validation.ProtobufJavaValidator.MISSING_MODIFIER_ERROR;
-import static com.google.eclipse.protobuf.validation.ProtobufJavaValidator.MORE_THAN_ONE_PACKAGE_ERROR;
-import static com.google.eclipse.protobuf.validation.ProtobufJavaValidator.REQUIRED_IN_PROTO3_ERROR;
-import static com.google.eclipse.protobuf.validation.ProtobufJavaValidator.SYNTAX_IS_NOT_KNOWN_ERROR;
+import static com.google.eclipse.protobuf.validation.ProtobufValidator.INVALID_FIELD_TAG_NUMBER_ERROR;
+import static com.google.eclipse.protobuf.validation.ProtobufValidator.MISSING_MODIFIER_ERROR;
+import static com.google.eclipse.protobuf.validation.ProtobufValidator.MORE_THAN_ONE_PACKAGE_ERROR;
+import static com.google.eclipse.protobuf.validation.ProtobufValidator.REQUIRED_IN_PROTO3_ERROR;
+import static com.google.eclipse.protobuf.validation.ProtobufValidator.SYNTAX_IS_NOT_KNOWN_ERROR;
 import static org.eclipse.emf.ecore.util.EcoreUtil.remove;
 import static org.eclipse.xtext.nodemodel.util.NodeModelUtils.findActualNodeFor;
 

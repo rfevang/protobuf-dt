@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015 Google Inc.
+ * Copyright (c) 2014 Google Inc.
  *
  * All rights reserved. This program and the accompanying materials are made available under the terms of the Eclipse
  * Public License v1.0 which accompanies this distribution, and is available at
@@ -10,8 +10,14 @@ package com.google.eclipse.protobuf.validation;
 
 import static com.google.eclipse.protobuf.junit.core.UnitTestModule.unitTestModule;
 import static com.google.eclipse.protobuf.junit.core.XtextRule.overrideRuntimeModuleWith;
+import static com.google.eclipse.protobuf.protobuf.ProtobufPackage.Literals.MAP_TYPE__VALUE_TYPE;
+import static com.google.eclipse.protobuf.validation.Messages.invalidMapValueType;
+import static com.google.eclipse.protobuf.validation.ProtobufValidator.MAP_WITH_MAP_VALUE_TYPE_ERROR;
+import static org.eclipse.xtext.validation.ValidationMessageAcceptor.INSIGNIFICANT_INDEX;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyZeroInteractions;
+
 import com.google.eclipse.protobuf.junit.core.XtextRule;
 import com.google.eclipse.protobuf.protobuf.MapType;
 import com.google.eclipse.protobuf.protobuf.MapTypeLink;
@@ -24,12 +30,12 @@ import org.junit.Rule;
 import org.junit.Test;
 
 /**
- * Tests for <code>{@link ProtobufJavaValidator#checkMapIsNotWithinExtension(MapType)}</code>
+ * Tests for <code>{@link ProtobufValidator#checkMapTypeHasValidValueType(MapType)}</code>
  */
-public class ProtobufJavaValidator_checkMapNotWithinTypeExtension {
+public class ProtobufValidator_checkMapTypeHasValidValueType_Test {
   @Rule public XtextRule xtext = overrideRuntimeModuleWith(unitTestModule());
 
-  @Inject private ProtobufJavaValidator validator;
+  @Inject private ProtobufValidator validator;
   private ValidationMessageAcceptor messageAcceptor;
 
   @Before public void setUp() {
@@ -39,37 +45,28 @@ public class ProtobufJavaValidator_checkMapNotWithinTypeExtension {
 
   // syntax = "proto2";
   //
-  // extend proto2.FieldOptions {
-  //   map<string, string> bar = 1;
+  // message Foo {
+  //   map<string, map<string, string> > bar = 1;
   // }
-  @Test public void should_create_error_if_map_within_type_extension() {
+  @Test public void should_create_error_if_value_type_is_map() {
     MessageField field = xtext.find("bar", MessageField.class);
     MapType map = ((MapTypeLink) field.getType()).getTarget();
-    validator.checkMapIsNotWithinExtension(map);
-    verify(messageAcceptor).acceptError(
-        Messages.mapWithinTypeExtension,
-        map,
-        null,
-        ValidationMessageAcceptor.INSIGNIFICANT_INDEX,
-        null);
+    validator.checkMapTypeHasValidValueType(map);
+    verify(messageAcceptor).acceptError(invalidMapValueType, map, MAP_TYPE__VALUE_TYPE,
+        INSIGNIFICANT_INDEX, MAP_WITH_MAP_VALUE_TYPE_ERROR);
   }
 
   // syntax = "proto2";
   //
-  // extend proto2.FieldOptions {
-  //   optional group my_group = 1 {
-  //     map<string, string> bar = 2;
-  //   }
+  // message Bar {}
+  //
+  // message Foo {
+  //   map<string, Bar> bar = 1;
   // }
-  @Test public void should_create_error_if_map_within_group_within_type_extension() {
+  @Test public void should_not_create_error_if_value_type_is_message() {
     MessageField field = xtext.find("bar", MessageField.class);
     MapType map = ((MapTypeLink) field.getType()).getTarget();
-    validator.checkMapIsNotWithinExtension(map);
-    verify(messageAcceptor).acceptError(
-        Messages.mapWithinTypeExtension,
-        map,
-        null,
-        ValidationMessageAcceptor.INSIGNIFICANT_INDEX,
-        null);
+    validator.checkMapTypeHasValidValueType(map);
+    verifyZeroInteractions(messageAcceptor);
   }
 }

@@ -18,7 +18,7 @@ import org.junit.Rule;
 import org.junit.Test;
 
 import com.google.eclipse.protobuf.junit.core.XtextRule;
-import com.google.eclipse.protobuf.validation.ProtobufJavaValidator;
+import com.google.eclipse.protobuf.validation.ProtobufValidator;
 import com.google.inject.Inject;
 
 /**
@@ -29,7 +29,7 @@ import com.google.inject.Inject;
 public class Issue148_FixDuplicateNameError_Test {
   @Rule public XtextRule xtext = overrideRuntimeModuleWith(unitTestModule());
 
-  @Inject private ProtobufJavaValidator validator;
+  @Inject private ProtobufValidator validator;
 
   // syntax = "proto2";
   //

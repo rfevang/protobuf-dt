@@ -32,10 +32,10 @@ import com.google.eclipse.protobuf.protobuf.MessageField;
 import com.google.eclipse.protobuf.protobuf.ProtobufPackage;
 import com.google.inject.Inject;
 
-public class ProtobufJavaValidator_checkForIndexConflicts_Test {
+public class ProtobufValidator_checkForIndexConflicts_Test {
   @Rule public XtextRule xtext = overrideRuntimeModuleWith(unitTestModule());
 
-  @Inject private ProtobufJavaValidator validator;
+  @Inject private ProtobufValidator validator;
   private ValidationMessageAcceptor messageAcceptor;
 
   @Before public void setUp() {

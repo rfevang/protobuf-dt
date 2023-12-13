@@ -11,7 +11,7 @@ package com.google.eclipse.protobuf.validation;
 import static com.google.eclipse.protobuf.junit.core.UnitTestModule.unitTestModule;
 import static com.google.eclipse.protobuf.junit.core.XtextRule.overrideRuntimeModuleWith;
 import static com.google.eclipse.protobuf.protobuf.ProtobufPackage.Literals.SYNTAX__NAME;
-import static com.google.eclipse.protobuf.validation.ProtobufJavaValidator.SYNTAX_IS_NOT_KNOWN_ERROR;
+import static com.google.eclipse.protobuf.validation.ProtobufValidator.SYNTAX_IS_NOT_KNOWN_ERROR;
 import static org.eclipse.xtext.validation.ValidationMessageAcceptor.INSIGNIFICANT_INDEX;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
@@ -30,16 +30,16 @@ import org.junit.Rule;
 import org.junit.Test;
 
 /**
- * Tests for <code>{@link ProtobufJavaValidator#checkSyntaxIsKnown(Syntax)}</code>
+ * Tests for <code>{@link ProtobufValidator#checkSyntaxIsKnown(Syntax)}</code>
  *
  * @author alruiz@google.com (Alex Ruiz)
  */
-public class ProtobufJavaValidator_checkSyntaxIsKnown_Test {
+public class ProtobufValidator_checkSyntaxIsKnown_Test {
   @Rule public XtextRule xtext = overrideRuntimeModuleWith(unitTestModule());
 
   private Syntax syntax;
   private ValidationMessageAcceptor messageAcceptor;
-  @Inject private ProtobufJavaValidator validator;
+  @Inject private ProtobufValidator validator;
 
   @Before public void setUp() {
     syntax = mock(Syntax.class);
