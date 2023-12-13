@@ -4,6 +4,9 @@ Bundle-Name: Ide
 Bundle-SymbolicName: com.google.eclipse.protobuf.ide
 Bundle-Version: 2.3.2.qualifier
 Require-Bundle: com.google.eclipse.protobuf;bundle-version="[2.3.2,3.0.0)",
- org.eclipse.xtext.ide;bundle-version="[2.33.0,3.0.0)"
+ org.eclipse.xtext.ide;bundle-version="[2.28.0,3.0.0)",
+ org.antlr.runtime;bundle-version="[3.2.0,3.2.1)"
 Automatic-Module-Name: com.google.eclipse.protobuf.ide
 Bundle-RequiredExecutionEnvironment: JavaSE-17
+Export-Package: com.google.eclipse.protobuf.ide.contentassist.antlr,
+ com.google.eclipse.protobuf.ide.contentassist.antlr.internal
