@@ -30,8 +30,6 @@ Require-Bundle: com.google.eclipse.protobuf;bundle-version="[2.3.2,3.0.0)",
  org.eclipse.xtext.ui.codetemplates.ui
 Bundle-RequiredExecutionEnvironment: JavaSE-17
 Export-Package: com.google.eclipse.protobuf.ui.contentassist,
- com.google.eclipse.protobuf.ui.contentassist.antlr,
- com.google.eclipse.protobuf.ui.contentassist.antlr.internal,
  com.google.eclipse.protobuf.ui.editor,
  com.google.eclipse.protobuf.ui.plugin,
  com.google.eclipse.protobuf.ui.preferences,
