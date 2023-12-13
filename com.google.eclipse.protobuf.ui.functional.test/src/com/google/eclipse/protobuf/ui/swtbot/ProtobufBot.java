@@ -64,8 +64,9 @@ public class ProtobufBot extends SWTWorkbenchBot {
   }
 
   public SWTBotEclipseEditor createFile(String name) {
-    menu("File").menu("New").menu("File").click();
-    SWTBotShell shell = shell("New File");
+    SWTBotShell workspaceShell = shell("junit-workspace - Eclipse Platform");
+    workspaceShell.menu().menu("File").menu("New").menu("File").click();
+    SWTBotShell shell = shell("Create New File");
     shell.activate();
     textWithLabel("File name:").setText(name);
     button("Finish").click();

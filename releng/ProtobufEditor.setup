@@ -17,6 +17,7 @@
         id="git.clone.protobuf-dt"
         location="${git.clone.protobuf-dt.location}"
         remoteURI="${git.clone.protobuf-dt.remoteURI}"
+        checkoutBranch="${git.clone.protobuf-dt.branch}"
         pushURI="">
       <configSections
           name="gerrit">
@@ -36,37 +37,24 @@
         xsi:type="setup:VariableTask"
         id="uri"
         name="git.clone.protobuf-dt.remoteURI"
-        defaultValue="https://protobuf-dt.googlesource.com/protobuf"
+        defaultValue="https://github.com/rfevang/protobuf-dt"
         label="Protobuf-dt Git Repository"/>
+    <setupTask
+        xsi:type="setup:VariableTask"
+        id="branch"
+        name="git.clone.protobuf-dt.branch"
+        defaultValue="master"/>
     <setupTask
         xsi:type="setup.p2:P2Task"
         id="protobuf_p2_director">
       <requirement
           name="org.eclipse.xtext.sdk.feature.group"/>
+      <requirement
+          name="org.eclipse.swtbot.ide.feature.group"/>
       <repository
-          url="http://download.eclipse.org/modeling/tmf/xtext/updates/composite/releases/"/>
+          url="https://download.eclipse.org/tools/cdt/releases/latest"/>
       <repository
-          url="http://download.eclipse.org/technology/swtbot/snapshots/"/>
-      <repository
-          url="http://download.eclipse.org/tools/cdt/releases/8.8.1"/>
-      <repository
-          url="http://download.eclipse.org/tools/orbit/downloads/drops/S20160501200945/repository/"/>
-      <repository
-          url="http://download.eclipse.org/modeling/tmf/xtext/updates/composite/latest/"/>
-      <repository
-          url="http://download.eclipse.org/eclipse/updates/4.6-I-builds"/>
-      <repository
-          url="http://download.eclipse.org/modeling/emf/updates/interim/"/>
-      <repository
-          url="http://download.eclipse.org/modeling/emft/mwe/updates/milestones/"/>
-      <repository
-          url="http://download.eclipse.org/tools/gef/gef4/updates/releases"/>
-      <repository
-          url="http://download.itemis.com/updates/milestones/"/>
-      <repository
-          url="http://download.eclipse.org/tools/cdt/builds/mars/milestones/"/>
-      <repository
-          url="http://download.eclipse.org/technology/swtbot/releases/latest/"/>
+          url="http://download.eclipse.org/technology/swtbot/releases/4.1.0/"/>
     </setupTask>
     <setupTask
         xsi:type="setup.targlets:TargletTask"
@@ -81,51 +69,35 @@
         <requirement
             name="de.itemis.xtext.antlr.feature.feature.group"/>
         <requirement
-            name="de.itemis.xtext.antlr.sdk.feature.group"/>
+            name="org.hamcrest.library"/>
         <requirement
-            name="org.antlr.runtime"/>
+            name="org.mockito"/>
         <requirement
-            name="org.hamcrest.library.source"/>
+            name="org.eclipse.xtext.generator"/>
         <requirement
-            name="org.hamcrest.generator"/>
+            name="org.eclipse.xtend.sdk.feature.group"/>
         <requirement
             name="org.eclipse.cdt.feature.group"/>
         <requirement
-            name="org.eclipse.cdt.sdk.feature.group"/>
+            name="org.eclipse.ui.trace"/>
         <requirement
             name="org.eclipse.swtbot.eclipse.feature.group"/>
         <requirement
             name="org.eclipse.platform.feature.group"/>
         <requirement
             name="org.eclipse.jdt.feature.group"/>
-        <sourceLocator
-            rootFolder="${git.clone.protobuf-dt.location}"/>
         <repositoryList
             name="protobuf_repositories_list">
           <repository
-              url="http://download.eclipse.org/modeling/tmf/xtext/updates/composite/releases/"/>
+              url="https://download.eclipse.org/modeling/tmf/xtext/updates/releases/2.27.0/"/>
           <repository
-              url="http://download.eclipse.org/technology/swtbot/snapshots/"/>
+              url="https://download.eclipse.org/tools/cdt/releases/latest"/>
           <repository
-              url="http://download.eclipse.org/tools/cdt/releases/8.8.1"/>
+              url="https://download.eclipse.org/releases/2022-09/202209141001/"/>
           <repository
-              url="http://download.eclipse.org/tools/orbit/downloads/drops/S20160501200945/repository/"/>
-          <repository
-              url="http://download.eclipse.org/modeling/tmf/xtext/updates/composite/latest/"/>
-          <repository
-              url="http://download.eclipse.org/eclipse/updates/4.6-I-builds"/>
-          <repository
-              url="http://download.eclipse.org/modeling/emf/updates/interim/"/>
-          <repository
-              url="http://download.eclipse.org/modeling/emft/mwe/updates/milestones/"/>
-          <repository
-              url="http://download.eclipse.org/tools/gef/gef4/updates/releases"/>
+              url="https://download.eclipse.org/tools/orbit/downloads/2022-09/"/>
           <repository
               url="http://download.itemis.com/updates/milestones/"/>
-          <repository
-              url="http://download.eclipse.org/tools/cdt/builds/mars/milestones/"/>
-          <repository
-              url="http://download.eclipse.org/technology/swtbot/releases/latest/"/>
         </repositoryList>
       </targlet>
       <description></description>
