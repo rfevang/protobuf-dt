@@ -8,18 +8,18 @@
  */
 package com.google.eclipse.protobuf.scoping;
 
-import org.eclipse.xtext.generator.scoping.AbstractScopingFragment;
-import org.eclipse.xtext.scoping.IGlobalScopeProvider;
-import org.eclipse.xtext.scoping.IScopeProvider;
+import org.eclipse.xtext.xtext.generator.model.TypeReference;
+import org.eclipse.xtext.xtext.generator.scoping.ImportNamespacesScopingFragment2;
 
-public class ProtobufImportNamespacesScopingFragment extends AbstractScopingFragment {
-  @Override
-  protected Class<? extends IGlobalScopeProvider> getGlobalScopeProvider() {
-    return ProtobufImportUriGlobalScopeProvider.class;
+public class ProtobufImportNamespacesScopingFragment extends ImportNamespacesScopingFragment2 {
+
+	@Override
+  protected TypeReference getGlobalScopeProvider() {
+    return new TypeReference(ProtobufImportUriGlobalScopeProvider.class);
   }
 
   @Override
-  protected Class<? extends IScopeProvider> getLocalScopeProvider() {
-    return ProtobufImportedNamespaceAwareLocalScopeProvider.class;
+  protected TypeReference getDelegateScopeProvider() {
+    return new TypeReference(ProtobufImportedNamespaceAwareLocalScopeProvider.class);
   }
 }
