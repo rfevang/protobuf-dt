@@ -9,6 +9,7 @@
 package com.google.eclipse.protobuf
 
 import com.google.eclipse.protobuf.conversion.ProtobufTerminalConverters
+import com.google.eclipse.protobuf.formatting.ProtobufFormatter
 import com.google.eclipse.protobuf.linking.ProtobufResource
 import com.google.eclipse.protobuf.naming.ProtobufQualifiedNameConverter
 import com.google.eclipse.protobuf.naming.ProtobufQualifiedNameProvider
@@ -21,6 +22,7 @@ import com.google.eclipse.protobuf.validation.ProtobufSyntaxErrorMessageProvider
 import com.google.inject.Binder
 import org.eclipse.core.runtime.IExtensionRegistry
 import org.eclipse.xtext.conversion.IValueConverterService
+import org.eclipse.xtext.formatting.IFormatter
 import org.eclipse.xtext.naming.IQualifiedNameConverter
 import org.eclipse.xtext.naming.IQualifiedNameProvider
 import org.eclipse.xtext.parser.antlr.ISyntaxErrorMessageProvider
@@ -73,5 +75,9 @@ class ProtobufRuntimeModule extends AbstractProtobufRuntimeModule {
 
 	def void configureExtensionRegistry(Binder binder) {
 		binder.bind(IExtensionRegistry).toProvider(ExtensionRegistryProvider)
+	}
+
+	override Class<? extends IFormatter> bindIFormatter() {
+		return ProtobufFormatter
 	}
 }
