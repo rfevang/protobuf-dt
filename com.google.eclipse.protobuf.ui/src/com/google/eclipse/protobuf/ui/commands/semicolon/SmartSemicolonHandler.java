@@ -29,11 +29,11 @@ import com.google.eclipse.protobuf.protobuf.MessageField;
 import com.google.eclipse.protobuf.ui.commands.SmartInsertHandler;
 import com.google.eclipse.protobuf.ui.preferences.editor.numerictag.NumericTagPreferences;
 import com.google.inject.Inject;
-
 import org.apache.log4j.Logger;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.IRegion;
+import org.eclipse.jface.text.ITextSelection;
 import org.eclipse.jface.text.Region;
 import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.custom.StyledTextContent;
@@ -43,15 +43,17 @@ import org.eclipse.text.edits.ReplaceEdit;
 import org.eclipse.text.edits.TextEdit;
 import org.eclipse.xtext.EcoreUtil2;
 import org.eclipse.xtext.RuleCall;
+import org.eclipse.xtext.ide.editor.contentassist.antlr.ContentAssistContextFactory;
 import org.eclipse.xtext.nodemodel.ILeafNode;
 import org.eclipse.xtext.nodemodel.INode;
 import org.eclipse.xtext.nodemodel.util.NodeModelUtils;
 import org.eclipse.xtext.resource.XtextResource;
 import org.eclipse.xtext.ui.editor.XtextEditor;
-import org.eclipse.xtext.ui.editor.contentassist.ContentAssistContext;
-import org.eclipse.xtext.ui.editor.contentassist.antlr.ParserBasedContentAssistContextFactory;
+import org.eclipse.xtext.ide.editor.contentassist.ContentAssistContext;
 import org.eclipse.xtext.ui.editor.model.IXtextDocument;
 import org.eclipse.xtext.ui.editor.preferences.IPreferenceStoreAccess;
+import org.eclipse.xtext.util.ITextRegion;
+import org.eclipse.xtext.util.TextRegion;
 import org.eclipse.xtext.util.concurrent.IUnitOfWork;
 
 import java.util.ArrayList;
@@ -60,6 +62,8 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -74,13 +78,18 @@ public class SmartSemicolonHandler extends SmartInsertHandler {
 
   private static Logger logger = Logger.getLogger(SmartSemicolonHandler.class);
 
-  @Inject private ParserBasedContentAssistContextFactory contextFactory;
+  @Inject private ContentAssistContextFactory contextFactory;
   @Inject private IndexedElements indexedElements;
   @Inject private Literals literals;
   @Inject private INodes nodes;
   @Inject private Protobufs protobufs;
   @Inject private Resources resources;
   @Inject private IPreferenceStoreAccess storeAccess;
+  private ExecutorService pool;
+
+  public SmartSemicolonHandler() {
+    pool = Executors.newFixedThreadPool(3);
+  }
 
   @Override protected void insertContent(final XtextEditor editor, final StyledText styledText) {
     final IXtextDocument document = editor.getDocument();
@@ -136,8 +145,11 @@ public class SmartSemicolonHandler extends SmartInsertHandler {
   }
 
   private EObject findCompletableElement(XtextEditor editor, int offset, XtextResource resource) {
+    contextFactory.setPool(pool);
+    ITextSelection selection = (ITextSelection) editor.getSelectionProvider().getSelection();
+    ITextRegion selectionRegion = new TextRegion(selection.getOffset(), selection.getLength());
     ContentAssistContext[] contexts =
-        contextFactory.create(editor.getInternalSourceViewer(), offset, resource);
+        contextFactory.create(editor.getDocument().get(), selectionRegion, offset, resource);
 
     for (ContentAssistContext context : contexts) {
       if (nodes.isCommentOrString(context.getCurrentNode())) {
